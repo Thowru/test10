@@ -66,6 +66,7 @@ def feature_extract(df):
 
         cnt += 1
     return df
+    
 def main():
     st.title('로그 데이터 처리 앱')
 
