@@ -66,7 +66,6 @@ def feature_extract(df):
 
         cnt += 1
     return df
-
 def main():
     st.title('로그 데이터 처리 앱')
 
@@ -91,14 +90,17 @@ def main():
         columns_order = ['entity'] + [col for col in df_entity_processed.columns if col != 'entity']
         df_entity_processed = df_entity_processed[columns_order]
 
-        # 전처리된 데이터 출력
-        st.write("전처리된 데이터:")
-        st.write(df_entity_processed)
+        # 중복된 행 제거
+        df_entity_processed_no_duplicates = df_entity_processed.drop_duplicates()
 
-        # CSV 파일 다운로드 버튼 생성
-        csv_file = df_entity_processed.to_csv(index=False).encode()
-        b64 = base64.b64encode(csv_file).decode()
-        st.button("Download CSV 파일", on_click=lambda: st.markdown(f'<a href="data:file/csv;base64,{b64}" download="preprocessed_data.csv">Download CSV 파일</a>', unsafe_allow_html=True))
+        # 전처리된 데이터 출력 (중복 제거)
+        st.write("전처리된 데이터 (중복 제거):")
+        st.write(df_entity_processed_no_duplicates)
+
+        # CSV 파일 다운로드 버튼 생성 (중복 제거된 데이터)
+        csv_file_no_duplicates = df_entity_processed_no_duplicates.to_csv(index=False).encode()
+        b64_no_duplicates = base64.b64encode(csv_file_no_duplicates).decode()
+        st.button("Download CSV 파일 (중복 제거)", on_click=lambda: st.markdown(f'<a href="data:file/csv;base64,{b64_no_duplicates}" download="preprocessed_data_no_duplicates.csv">Download CSV 파일 (중복 제거)</a>', unsafe_allow_html=True))
 
 if __name__ == '__main__':
     main()
